@@ -1,0 +1,134 @@
+
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pokédex - Ejercicio Práctico</title>
+  <link rel="stylesheet" href="estilos.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">PK</div>
+      <h1>Pokédex - Ejercicio Práctico</h1>
+    </div>
+
+    <div class="card" id="resultCard">
+      <div class="result-left">
+        <img id="img_ej" src="" alt="pokemon" />
+      </div>
+      <div class="result-right">
+        <h2 id="nombre_ej">—</h2>
+        <p id="meta_ej" class="meta small">Busca por nombre o por ID. Se mostrarán ID, peso, altura y habilidades.</p>
+
+        <div class="controls">
+          <input id="inputNombre" placeholder="buscar por nombre (ej: bulbasaur)" />
+          <button id="btnNombre">Buscar</button>
+        </div>
+
+        <div class="controls" style="margin-top:8px">
+          <input id="inputID" type="number" placeholder="buscar por ID (ej: 25)" />
+          <button id="btnID">Buscar por ID</button>
+        </div>
+
+        <div id="datosExtra" class="small" style="margin-top:10px;display:none">
+          <div><strong>ID:</strong> <span id="datoID"></span></div>
+          <div><strong>Peso:</strong> <span id="datoPeso"></span></div>
+          <div><strong>Altura:</strong> <span id="datoAltura"></span></div>
+          <div><strong>Habilidades:</strong><ul id="listaHabs" class="list"></ul></div>
+        </div>
+
+        <div id="errorEj" class="error" style="display:none"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Ejercicio práctico - lógica inline para facilitar revisión
+    const imgEj = document.getElementById('img_ej');
+    const nombreEj = document.getElementById('nombre_ej');
+    const inputNombre = document.getElementById('inputNombre');
+    const btnNombre = document.getElementById('btnNombre');
+    const inputID = document.getElementById('inputID');
+    const btnID = document.getElementById('btnID');
+    const errorEj = document.getElementById('errorEj');
+    const datosExtra = document.getElementById('datosExtra');
+    const datoID = document.getElementById('datoID');
+    const datoPeso = document.getElementById('datoPeso');
+    const datoAltura = document.getElementById('datoAltura');
+    const listaHabs = document.getElementById('listaHabs');
+
+    async function fetchPokemon(valor){
+      errorEj.style.display='none';
+      try{
+        const res = await fetch('https://pokeapi.co/api/v2/pokemon/' + String(valor).toLowerCase());
+        if(!res.ok) throw new Error('Pokémon no encontrado');
+        const data = await res.json();
+        return data;
+      }catch(e){
+        throw e;
+      }
+    }
+
+    function mostrarDatosCompletos(data){
+      nombreEj.textContent = data.name;
+      imgEj.src = data.sprites?.other?.dream_world?.front_default || data.sprites?.front_default || '';
+      imgEj.alt = data.name;
+
+      datoID.textContent = data.id;
+      datoPeso.textContent = data.weight;
+      datoAltura.textContent = data.height;
+
+      // habilidades
+      listaHabs.innerHTML = '';
+      data.abilities.forEach(a => {
+        const li = document.createElement('li');
+        li.textContent = a.ability.name;
+        listaHabs.appendChild(li);
+      });
+
+      datosExtra.style.display = 'block';
+    }
+
+    btnNombre.addEventListener('click', async ()=>{
+      const val = inputNombre.value.trim();
+      if(!val){ errorEj.style.display='block'; errorEj.textContent='Ingresa un nombre.'; return; }
+      try{
+        const data = await fetchPokemon(val);
+        mostrarDatosCompletos(data);
+      }catch(e){
+        errorEj.style.display='block'; errorEj.textContent = e.message;
+        datosExtra.style.display = 'none';
+      }
+    });
+
+    btnID.addEventListener('click', async ()=>{
+      const id = inputID.value.trim();
+      if(!id){ errorEj.style.display='block'; errorEj.textContent='Ingresa un ID.'; return; }
+      try{
+        const data = await fetchPokemon(id);
+        mostrarDatosCompletos(data);
+      }catch(e){
+        errorEj.style.display='block'; errorEj.textContent = e.message;
+        datosExtra.style.display = 'none';
+      }
+    });
+
+    // permitir Enter
+    inputNombre.addEventListener('keyup', e=> { if(e.key==='Enter') btnNombre.click(); });
+    inputID.addEventListener('keyup', e=> { if(e.key==='Enter') btnID.click(); });
+
+    // cargar por defecto: pikachu
+    (async ()=>{
+      try{
+        const d = await fetchPokemon('pikachu');
+        mostrarDatosCompletos(d);
+      }catch(e){
+        console.warn(e);
+      }
+    })();
+  </script>
+</body>
+</html>

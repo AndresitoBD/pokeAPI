@@ -1,0 +1,38 @@
+
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pokédex - Básica</title>
+  <link rel="stylesheet" href="estilos.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">PK</div>
+      <h1>Pokédex - Básica (index.html)</h1>
+    </div>
+
+    <div class="card" id="resultCard">
+      <div class="result-left">
+        <img id="img" src="" alt="pokemon" />
+      </div>
+      <div class="result-right">
+        <h2 id="nombre_pokemon">—</h2>
+        <p class="meta small">Nombre e imagen traídos desde la PokéAPI</p>
+
+        <div class="controls">
+          <input id="inputBuscar" placeholder="buscar por nombre (ej: pikachu)" />
+          <button id="botonBuscar">Buscar</button>
+        </div>
+
+        <p class="footer">Versión simple: busca por nombre y muestra imagen.</p>
+        <div id="error" class="error" style="display:none"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+</html>

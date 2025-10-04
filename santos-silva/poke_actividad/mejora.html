@@ -1,0 +1,39 @@
+
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pokédex - Mejorada</title>
+  <link rel="stylesheet" href="estilos.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">PK</div>
+      <h1>Pokédex - Mejorada (mejora.html)</h1>
+    </div>
+
+    <div class="card" id="resultCard">
+      <div class="result-left">
+        <img id="imagenResultadoEl" src="" alt="imagen pokemon" />
+      </div>
+      <div class="result-right">
+        <h2 id="nombreResultadoEl">—</h2>
+        <p id="subtitulo" class="meta small">Busca por nombre. Se prioriza imagen 'dream_world'.</p>
+
+        <div class="search-row">
+          <input id="inputBuscarMejora" placeholder="ej: pikachu" />
+          <button id="botonBuscarMejora">Buscar</button>
+        </div>
+
+        <p id="estado" class="small"></p>
+        <div id="errorMejora" class="error" style="display:none"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="mejora.js"></script>
+</body>
+</html>
